@@ -7,8 +7,8 @@ const home = '/home/alexis/Projet/http2';
 const docRoot = home + '/images/160';
 
 const options = {
-  key: fs.readFileSync(home + '/ssl/key.pem'),
-  cert: fs.readFileSync(home + '/ssl/cert.pem')
+  key: fs.readFileSync(home + '/ssl/server.key'),
+  cert: fs.readFileSync(home + '/ssl/server.crt')
 };
 
 const requestHandler = (request, response) => {
