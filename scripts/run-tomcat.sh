@@ -10,4 +10,5 @@ docker run  \
     --rm  \
     --name demo.server  \
     --network demo \
-    tomcat:9-jre${jre_version:-9} 
+    tomcat:9-jre${jre_version:-9}
+
