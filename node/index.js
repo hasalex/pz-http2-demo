@@ -2,13 +2,13 @@ const https = require('https'),
       http2 = require('http2'),
       fs = require('fs');
 
-const latency = 300;
-const home = '/home/alexis/Projet/http2';
-const docRoot = home + '/images/160';
+const latency = 0;
+const docRoot = '/images/160';
 
 const options = {
-  key: fs.readFileSync(home + '/ssl/server.key'),
-  cert: fs.readFileSync(home + '/ssl/server.crt')
+  key: fs.readFileSync('/ssl/server.key'),
+  cert: fs.readFileSync('/ssl/server.crt'),
+  allowHTTP1: true 
 };
 
 const requestHandler = (request, response) => {
@@ -39,13 +39,23 @@ server1.listen(portH1, (err) => {
   }
 });
 
-const server2 = http2.createSecureServer(options, requestHandler);
+const server2 = http2. createSecureServer(options, requestHandler);
 const portH2 = 8002;
 server2.listen(portH2, (err) => {
   if (err) {
     console.log('HTTP/2 server fail', err);
   } else {
     console.log(`HTTP/2 server is listening on ${portH2}`);
+  }
+});
+
+const server2c = http2.createServer({}, requestHandler);
+const portH2C = 8003;
+server2c.listen(portH2C, (err) => {
+  if (err) {
+    console.log('HTTP/2 clear text server fail', err);
+  } else {
+    console.log(`HTTP/2 clear text server is listening on ${portH2C}`);
   }
 });
 
@@ -86,7 +96,7 @@ const requestHandlerWithPush = (request, response) => {
 }
 
 const server2push = http2.createSecureServer(options, requestHandlerWithPush);
-const portH2push = 8003;
+const portH2push = 8012;
 server2push.listen(portH2push, (err) => {
   if (err) {
     console.log('HTTP/2 (push) server fail', err);

@@ -9,7 +9,7 @@ docker run  \
     --volume mvn_repo:/root/.m2/repository \
     --workdir /project \
     --rm  \
-    --name demo.serever  \
+    --name demo.server  \
     --network demo -it \
     maven:3.5-jdk-${jre_version:-9} \
     mvn clean package exec:exec -Dssl.home=/ssl/ $2
@@ -29,7 +29,7 @@ docker run  \
     --volume ~/.m2/repository:/root/.m2/repository \
     --workdir /project \
     --rm  \
-    --name demo.serever  \
+    --name demo.server  \
     --network demo \
     maven:3.5-jdk-${jre_version:-9} \
     mvn clean
