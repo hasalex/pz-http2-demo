@@ -1,15 +1,15 @@
 #! /bin/bash
 jre_version=$1
 
-
 docker run  \
     --volume $(pwd)/vertx:/project \
     --volume $(pwd)/ssl:/ssl \
-    --volume $(pwd)/images:/images \
+    --volume $(pwd)/images/80:/images \
     --volume mvn_repo:/root/.m2/repository \
     --workdir /project \
     --rm  \
-    --name demo.server  \
+    --name demo.server \
+    --ip 172.44.0.100 \
     --network demo -it \
     maven:3.5-jdk-${jre_version:-9} \
     mvn clean package exec:exec -Dssl.home=/ssl/ $2
@@ -30,6 +30,7 @@ docker run  \
     --workdir /project \
     --rm  \
     --name demo.server  \
+    --ip 172.44.0.100 \
     --network demo \
     maven:3.5-jdk-${jre_version:-9} \
     mvn clean

@@ -20,15 +20,15 @@ public class Http2ExampleVerticle extends AbstractVerticle {
 
     private static final String HOST = "0.0.0.0";
     private static String sslHome;
-    private static String siteHome = "../images/160";
+    private static String siteHome = "../images";
 
     private List<HttpServer> servers = new ArrayList<>();
 
     @Override
     public void start() {
-        startServer(8080, null);         // No SSL
-        startServer(8444, new OpenSSLEngineOptions()); // Should not fail
-        startServer(8443, new JdkSSLEngineOptions());  // Should fail with Java 8
+        startServer(8001, null);         // No SSL
+        startServer(8003, new JdkSSLEngineOptions());  // Should fail with Java 8
+        startServer(8004, new OpenSSLEngineOptions()); // Should not fail
     }
 
     private void startServer(int port, SSLEngineOptions sslEngineOptions) {
@@ -50,8 +50,8 @@ public class Http2ExampleVerticle extends AbstractVerticle {
     private Handler<HttpServerRequest> createHandler() {
 //        return request -> request.response().end("Hello Vert.x!");
         Router router = Router.router(vertx);
-        router.route("/dino.html")
-                .handler(event -> event.response().push(HttpMethod.GET, siteHome + "/main.css", response -> {}).sendFile(siteHome + "/dino.html"));
+//        router.route("/dino.html")
+//                .handler(event -> event.response().push(HttpMethod.GET, "/main.css", response -> {}).sendFile(siteHome + "/dino.html"));
         router.route().handler(StaticHandler.create(siteHome));
         return router::accept;
     }
@@ -94,8 +94,3 @@ public class Http2ExampleVerticle extends AbstractVerticle {
 
 }
 
-/*
-Push
-h2c => rien à faire !
-Jetty ALPN
- */

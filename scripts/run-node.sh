@@ -6,7 +6,10 @@ docker run  \
     --workdir /project \
     --rm -i -t \
     --name demo.server  \
+    --ip 172.44.0.100 \
     --network demo  \
     node:8 \
-    node spdy.js
+    node index.js
+
+#    node spdy.js
 

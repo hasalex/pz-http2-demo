@@ -39,23 +39,23 @@ server1.listen(portH1, (err) => {
   }
 });
 
-const server2 = http2. createSecureServer(options, requestHandler);
-const portH2 = 8002;
-server2.listen(portH2, (err) => {
-  if (err) {
-    console.log('HTTP/2 server fail', err);
-  } else {
-    console.log(`HTTP/2 server is listening on ${portH2}`);
-  }
-});
-
 const server2c = http2.createServer({}, requestHandler);
-const portH2C = 8003;
+const portH2C = 8002;
 server2c.listen(portH2C, (err) => {
   if (err) {
     console.log('HTTP/2 clear text server fail', err);
   } else {
     console.log(`HTTP/2 clear text server is listening on ${portH2C}`);
+  }
+});
+
+const server2 = http2. createSecureServer(options, requestHandler);
+const portH2 = 8003;
+server2.listen(portH2, (err) => {
+  if (err) {
+    console.log('HTTP/2 server fail', err);
+  } else {
+    console.log(`HTTP/2 server is listening on ${portH2}`);
   }
 });
 
@@ -96,7 +96,7 @@ const requestHandlerWithPush = (request, response) => {
 }
 
 const server2push = http2.createSecureServer(options, requestHandlerWithPush);
-const portH2push = 8012;
+const portH2push = 8013;
 server2push.listen(portH2push, (err) => {
   if (err) {
     console.log('HTTP/2 (push) server fail', err);
@@ -104,3 +104,4 @@ server2push.listen(portH2push, (err) => {
     console.log(`HTTP/2 (push) server is listening on ${portH2push}`);
   }
 });
+
