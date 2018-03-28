@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <vertx.version>3.5.0</vertx.version>
+        <vertx.version>3.5.1</vertx.version>
         <java.version>1.8</java.version>
         <main.verticle>fr.sewatech.vertx.Http2ExampleVerticle</main.verticle>
         <ssl.home>../ssl/</ssl.home>

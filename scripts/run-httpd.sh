@@ -5,7 +5,7 @@ docker run  \
     --volume empty:/usr/local/apache2/conf/extra/httpd-proxy.conf  \
     --volume $(pwd)/ssl/server.crt:/usr/local/apache2/conf/server.crt  \
     --volume $(pwd)/ssl/server.key:/usr/local/apache2/conf/server.key  \
-    --volume $(pwd)/images/80:/usr/local/apache2/htdocs/  \
+    --volume $(pwd)/images/160:/usr/local/apache2/htdocs/  \
     --rm  \
     --ip 172.44.0.100 \
     --name demo.server  \

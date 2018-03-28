@@ -26,16 +26,23 @@ public class Http2ExampleVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
+        vertx
+                .createHttpServer()
+                .requestHandler(request -> request.response().end("OK"))
+                .listen(8000);
+
         startServer(8001, null);         // No SSL
+        startServer(8002, null);         // No SSL
         startServer(8003, new JdkSSLEngineOptions());  // Should fail with Java 8
         startServer(8004, new OpenSSLEngineOptions()); // Should not fail
     }
 
     private void startServer(int port, SSLEngineOptions sslEngineOptions) {
         try {
-            HttpServer server = vertx.createHttpServer(createOptions(port, sslEngineOptions));
-            server.requestHandler(createHandler());
-            server.listen(this::log);
+            HttpServer server = vertx
+                    .createHttpServer(createOptions(port, sslEngineOptions))
+                    .requestHandler(createHandler())
+                    .listen(this::log);
             servers.add(server);
         } catch (VertxException e) {
             System.out.println("Fail to start server on port "  + port + " : " + e.getMessage());
@@ -48,10 +55,7 @@ public class Http2ExampleVerticle extends AbstractVerticle {
     }
 
     private Handler<HttpServerRequest> createHandler() {
-//        return request -> request.response().end("Hello Vert.x!");
         Router router = Router.router(vertx);
-//        router.route("/dino.html")
-//                .handler(event -> event.response().push(HttpMethod.GET, "/main.css", response -> {}).sendFile(siteHome + "/dino.html"));
         router.route().handler(StaticHandler.create(siteHome));
         return router::accept;
     }

@@ -1,0 +1,28 @@
+[ ca ]
+default_ca    = CA_default      # The default ca section
+[ CA_default ]
+default_days     = 1000         # how long to certify for
+default_crl_days = 30           # how long before next CRL
+default_md       = sha256       # use public key default MD
+preserve         = no           # keep passed DN ordering
+x509_extensions = ca_extensions # The extensions to add to the cert
+email_in_dn     = no            # Don't concat the email in the DN
+copy_extensions = copy          # Required to copy SANs from CSR to cert
+
+
+[req]
+default_bits = 2048
+default_md = sha256
+distinguished_name = dn
+req_extensions = v3_req
+[dn]
+[v3_req]
+basicConstraints=CA:false
+keyUsage=critical,digitalSignature,nonRepudiation,keyEncipherment,dataEncipherment
+extendedKeyUsage=serverAuth
+subjectAltName = @alt_names 
+[alt_names]
+DNS.1 = demo.proxy
+DNS.2 = slide.server
+DNS.3 = demo.server
+
