@@ -10,9 +10,11 @@
 
         NumberFormat formatter = NumberFormat.getIntegerInstance();
         formatter.setMinimumIntegerDigits(3);
-        for (int i = 0; i <= 143; i++) {
+        for (int i = 0; i <= 300; i++) {
             pushBuilder.path("/rocket-" + formatter.format(i) + ".jpg").push();
         }
+        // Nombre de push effectifs limité (196 ?)
+        // Erreur lecture de réponse à 575
     } else {
         System.out.println("-- Push disabled");
     }
