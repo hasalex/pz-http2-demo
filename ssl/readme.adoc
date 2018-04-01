@@ -1,0 +1,27 @@
+= SSL
+
+Tous les scripts fonctionnent avec des chemins relatifs.
+Il faut les appeler depuis le répertoire courant.
+
+== env.sh
+
+Ce script est appelé par les autres.
+Il permet de renseigner les variables d'environnement qu'ils utilisent, en particulier pour les mots de passe et les DN.
+
+== generate-root-ca.sh
+
+Ce script crée une paire de clés et un certificat pour le CA racine.
+Attention, il écrase les fichiers qui auraient été générés précédemment.
+
+== generate-signing-ca.sh
+
+Ce script crée une paire de clés et un certificat pour le CA de signature.
+Attention, il écrase les fichiers qui auraient été générés précédemment.
+
+C'est ce certificat qu'il faut importer dans le navigateur pour ne pas avoir d'alerte sécurité
+
+== generate-server.sh
+
+Les scripts generate-xxx.sh sont prévus pour générer une paire de clés et un certificat pour un serveur.
+Le certificat est à la fois au format PEM et PKCS#12.
+

@@ -28,7 +28,7 @@
         <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
         <SSLHostConfig>
             <Certificate certificateKeystoreFile="conf/server.p12"
-                         certificateKeystorePassword="tomcat"
+                         certificateKeystorePassword="p12pwd"
                          certificateKeystoreType="PKCS12"
                          type="RSA" />
         </SSLHostConfig>
@@ -40,7 +40,7 @@
         <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
         <SSLHostConfig>
             <Certificate certificateKeystoreFile="conf/server.p12"
-                         certificateKeystorePassword="tomcat"
+                         certificateKeystorePassword="p12pwd"
                          certificateKeystoreType="PKCS12"
                          type="RSA" />
         </SSLHostConfig>

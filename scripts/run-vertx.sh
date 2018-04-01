@@ -3,7 +3,8 @@ jre_version=$1
 
 docker run  \
     --volume $(pwd)/vertx:/project \
-    --volume $(pwd)/ssl:/ssl \
+    --volume $(pwd)/ssl/certs/demo.crt:/ssl/server.crt  \
+    --volume $(pwd)/ssl/certs/demo.key:/ssl/server.key  \
     --volume $(pwd)/images/80:/images \
     --volume mvn_repo:/root/.m2/repository \
     --workdir /project \

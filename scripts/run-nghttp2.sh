@@ -1,7 +1,7 @@
 #! /bin/bash
 mode=$1
 
-docker_cmd="docker run --volume $(pwd)/ssl/server.crt:/ssl/server.crt --volume $(pwd)/ssl/server.key:/ssl/server.key --volume $(pwd)/images/160:/html --rm -it --ip 172.44.0.100 --name demo.server --network demo svagi/nghttp2"
+docker_cmd="docker run --volume $(pwd)/ssl/certs/demo.crt:/ssl/server.crt --volume $(pwd)/ssl/certs/demo.key:/ssl/server.key --volume $(pwd)/images/160:/html --rm -it --ip 172.44.0.100 --name demo.server --network demo svagi/nghttp2"
 
 if [ 'x'$mode = 'xssl' ]
 then
