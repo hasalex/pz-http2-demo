@@ -30,7 +30,7 @@ Il faut donc lancer le serveur avant la présentation.
 Résumé :
 
 * hostname : slide.server
-* port 8001 : HTTP/1.x, TLS
+* port 8001 : HTTP/1.x, sans TLS
 * port 8003 : HTTP/2, TLS
 
 ## Demo #1 : nghttp2
@@ -43,13 +43,13 @@ C'est la seule démo sans docker.
 Serveur :
 
 ```
-nghttpd --no-tls -d ./images/80 8080
+nghttpd --no-tls -d ./images/80 8888
 ```
 
 Client :
 
 ```
-nghttp http://localhost:8080/hello
+nghttp http://localhost:8888/hello
 ```
 
 Par contre, en appelant cette URL depuis Chrome, ça ne marche pas.
@@ -64,15 +64,15 @@ Démarrer le serveur :
 ./scripts/run-httpd.sh
 ```
 
-Depuis Chrome, on accède au port 8001.
+Depuis Chrome, on accède au port 8001 (http://demo.server:8001/).
 Dans les dev tools, on voit que c'est un accès en HTTP/1.x.
 
-Puis on accède au port 8002.
+Puis on accède au port 8002 (http://demo.server:8002/).
 C'est aussi de l'HTTP/1.x.
 En effet, il n'y a pas d'upgrade car le client ne supporte pas h2c.
 Si on avait testé avec Nginx, ça n'aurait pas mamrché du tout car il ne supporte que h2c-direct.
 
-Enfin, on accède au port 8003, en HTTP/2.
+Enfin, on accède au port 8003 (https://demo.server:8003/), en HTTP/2.
 
 *Résumé* :
 
@@ -113,8 +113,10 @@ Maintenant le port 8003 est bien en HTTP/2.
 
 ## Demo #4 : Push
 
-Depuis le même serveur, on appelle la JSP au lieu de la page HTML, pour voir le push.
+Depuis le même serveur, on appelle la JSP au lieu de la page HTML, pour voir le push (https://demo.server:8003/push.jsp).
 Normalement, lorsqu'on accède à la page par un port HTTP/2, dev tools doit indiquer dans la colonne _initiator_ que les images sont récupérées par push.
+
+NOTE: l'information du push n'apparait pas dans Chrome 65.
 
 ## Demo #5 : Reverse Proxy
 
@@ -124,6 +126,56 @@ A cette étape, on conserve notre serveur Tomcat sur demo.server auquel on accè
 ./scripts/run-httpd-proxy.sh
 ```
 
-Remarque : le push de la JSP ne marche plus via ce reverse proxy.
+L'URL la plus intéressante est https://demo.proxy:8003/h2/push.jsp car bien qu'on soit en HTTP/2 de bout en bout, 
+le push de la JSP ne marche plus.
+C'est dû au fait que le mod_proxy_http2 désactive le push dans le frame de settings.
 
-*Résumé* :
+*Résumé (réseau)* :
+
+* hostname : demo.proxy
+* port 8001 : HTTP/1.x
+* port 8002 : HTTP/2, h2c
+* port 8003 : HTTP/2, h2
+
+*Résumé (reverse proxy)* :
+
+* https://demo.proxy:8003/ : HTTP/1
+* https://demo.proxy:8003/tls : HTTP/1, TLS
+* https://demo.proxy:8003/h2 : HTTP/2, h2
+* https://demo.proxy:8003/h2c : HTTP/2, h2c
+
+Références :
+* http://httpwg.org/specs/rfc7540.html#SETTINGS
+
+## Autre demo
+
+```
+./scripts/run-node.sh
+```
+
+* hostname : demo.server
+* port 8001 : HTTP/1.x
+* port 8002 : HTTP/2 h2c, uniquemement en direct sans fallback HTTP/1
+* port 8003 : HTTP/2 h2
+
+```
+./scripts/run-vertx.sh
+./scripts/run-vertx.sh 8
+```
+
+NOTE: ne marche pas avec Java 9, à cause d'un bug dans l'image Docker ; par contre en Java 10, ça marche
+
+* hostname : demo.server
+* port 8001 : HTTP/1.x
+* port 8002 : HTTP/2 h2c, uniquement en direct avec fallback HTTP/1
+* port 8003 : HTTP/2 h2
+
+```
+./scripts/run-nginx.sh
+```
+
+* hostname : demo.server
+* port 8001 : HTTP/1.x
+* port 8002 : HTTP/2 h2c, uniquement en direct sans fallback HTTP/1
+* port 8003 : HTTP/2 h2
+* https://demo.server:8003/push : HTTP/2 avec push

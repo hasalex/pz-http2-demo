@@ -21,4 +21,3 @@ const requestHandler = (request, response) => {
     return;
 }
 http2.createServer(options, requestHandler).listen(8009);
-

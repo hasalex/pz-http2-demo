@@ -1,9 +1,9 @@
-const https = require('https'),
+const http = require('http'),
+      https = require('https'),
       http2 = require('http2'),
       fs = require('fs');
 
-const latency = 0;
-const docRoot = '/images/160';
+const docRoot = '/html';
 
 const options = {
   key: fs.readFileSync('/ssl/server.key'),
@@ -13,23 +13,15 @@ const options = {
 
 const requestHandler = (request, response) => {
     if (request.url == '/') {
-        response.writeHead(302, {"Location": "/dino.html"});
-        response.end();
-        return;
+      answer("/index.html", response);
+    } else if (request.url == '/push') {
+      push("/index.html", response);
+    } else {
+      answer(request.url, response);
     }
-
-    fs.readFile(docRoot + request.url, function(err, file) {
-        if(err) {        
-            response.writeHead(500, {"Content-Type": "text/plain"});
-            response.write(err + '\n');
-            response.end();
-            return;
-        }
-        setTimeout(() => {response.end(file)}, latency);
-    });
 }
 
-const server1 = https.createServer(options, requestHandler);
+const server1 = http.createServer(requestHandler);
 const portH1 = 8001;
 server1.listen(portH1, (err) => {
   if (err) {
@@ -39,7 +31,7 @@ server1.listen(portH1, (err) => {
   }
 });
 
-const server2c = http2.createServer({}, requestHandler);
+const server2c = http2.createServer(requestHandler);
 const portH2C = 8002;
 server2c.listen(portH2C, (err) => {
   if (err) {
@@ -49,7 +41,7 @@ server2c.listen(portH2C, (err) => {
   }
 });
 
-const server2 = http2. createSecureServer(options, requestHandler);
+const server2 = http2.createSecureServer(options, requestHandler);
 const portH2 = 8003;
 server2.listen(portH2, (err) => {
   if (err) {
@@ -59,49 +51,34 @@ server2.listen(portH2, (err) => {
   }
 });
 
-const requestHandlerWithPush = (request, response) => {
-    if (request.url == '/') {
-      response.writeHead(302, {"Location": "/dino.html"});
-      response.end();
-      return;
-    } else if (request.url == '/dino.html') {
-      const pushHeaders = {
-        ':status': '200',
-        'content-type': 'image/jpg'
-      };
-
-      fs.readdir(docRoot, (err, files) => {
-        files
-          .filter(element => !element.endsWith('.html'))
-          .forEach(element => {
-            const file = '/' + element;
-            response.stream.pushStream({":path": file}, (pushStream) => {
-              pushStream.respondWithFile(docRoot + file);
-            });
-          });
-        setTimeout(() => {response.stream.respondWithFile(docRoot + '/dino.html')}, latency);
-      });
-
-    } else {
-      fs.readFile(docRoot + request.url, function(err, file) {
-        if(err) {        
-          response.writeHead(500, {"Content-Type": "text/plain"});
-          response.write(err + '\n');
-          response.end();
-          return;
-        }
-        setTimeout(() => {response.end(file)}, latency);
-      });
+function answer(url, response) {
+  fs.readFile(docRoot + url, function(err, file) {
+    if (err) {        
+        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.write(err + '\n');
+        response.end();
+        return;
     }
+    response.end(file);
+  });
 }
 
-const server2push = http2.createSecureServer(options, requestHandlerWithPush);
-const portH2push = 8013;
-server2push.listen(portH2push, (err) => {
-  if (err) {
-    console.log('HTTP/2 (push) server fail', err);
+function push(url, response) {
+  if (response.stream) {
+    fs.readdir(docRoot, (err, files) => {
+      files
+        .filter(element => !element.endsWith('.html'))
+        .forEach(element => {
+          const file = '/' + element;
+          response.stream.pushStream({":path": file}, (pushStream) => {
+            pushStream.respondWithFile(docRoot + file);
+          });
+        });
+      response.stream.respondWithFile(docRoot + url);
+    });
   } else {
-    console.log(`HTTP/2 (push) server is listening on ${portH2push}`);
+    response.writeHead(500, {"Content-Type": "text/plain"});
+    response.write('Push not supported\n');
+    response.end();
   }
-});
-
+}

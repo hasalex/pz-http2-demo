@@ -12,7 +12,7 @@ docker run  \
     --name demo.server \
     --ip 172.44.0.100 \
     --network demo -it \
-    maven:3.5-jdk-${jre_version:-9} \
+    maven:3.5-jdk-${jre_version:-10} \
     mvn clean package exec:exec -Dssl.home=/ssl/ $2
 
 # Use host mvn repo : be careful to files' owner (root)
@@ -33,6 +33,6 @@ docker run  \
     --name demo.server  \
     --ip 172.44.0.100 \
     --network demo \
-    maven:3.5-jdk-${jre_version:-9} \
+    maven:3.5-jdk-${jre_version:-10} \
     mvn clean
 

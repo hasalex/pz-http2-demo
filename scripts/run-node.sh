@@ -3,7 +3,7 @@ docker run  \
     --volume $(pwd)/node:/project \
     --volume $(pwd)/ssl/certs/demo.crt:/ssl/server.crt  \
     --volume $(pwd)/ssl/certs/demo.key:/ssl/server.key  \
-    --volume $(pwd)/images:/images \
+    --volume $(pwd)/images/80:/html \
     --workdir /project \
     --rm -i -t \
     --name demo.server  \
