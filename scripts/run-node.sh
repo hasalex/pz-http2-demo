@@ -5,7 +5,7 @@ docker run  \
     --volume $(pwd)/ssl/certs/demo.key:/ssl/server.key  \
     --volume $(pwd)/images/80:/html \
     --workdir /project \
-    --rm -i -t \
+    --rm --interactive --tty \
     --name demo.server  \
     --ip 172.44.0.100 \
     --network demo  \
@@ -13,4 +13,4 @@ docker run  \
     node index.js
 
 #    node spdy.js
-
+#    node app.js

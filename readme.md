@@ -24,7 +24,7 @@ Cette démonstration préliminaire est intégrée aux slides.
 Il faut donc lancer le serveur avant la présentation.
 
 ```
-./script/run-httpd-slide.sh
+./scripts/run-httpd-slide.sh
 ```
 
 Résumé :
@@ -149,6 +149,8 @@ Références :
 
 ## Autre demo
 
+**NodeJS**
+
 ```
 ./scripts/run-node.sh
 ```
@@ -157,6 +159,8 @@ Références :
 * port 8001 : HTTP/1.x
 * port 8002 : HTTP/2 h2c, uniquemement en direct sans fallback HTTP/1
 * port 8003 : HTTP/2 h2
+
+**Vert.x**
 
 ```
 ./scripts/run-vertx.sh
@@ -170,6 +174,8 @@ NOTE: ne marche pas avec Java 9, à cause d'un bug dans l'image Docker ; par con
 * port 8002 : HTTP/2 h2c, uniquement en direct avec fallback HTTP/1
 * port 8003 : HTTP/2 h2
 
+**nginx**
+
 ```
 ./scripts/run-nginx.sh
 ```
@@ -179,3 +185,17 @@ NOTE: ne marche pas avec Java 9, à cause d'un bug dans l'image Docker ; par con
 * port 8002 : HTTP/2 h2c, uniquement en direct sans fallback HTTP/1
 * port 8003 : HTTP/2 h2
 * https://demo.server:8003/push : HTTP/2 avec push
+
+**Akka HTTP**
+
+_WIP_
+
+```
+./scripts/run-akka-http.sh
+```
+
+* hostname : demo.server
+* port 8001 : HTTP/1.x
+* port 8002 : rien, h2c n'est pas supporté
+* port 8003 : HTTP/2 h2
+* HTTP/2 n'est qu'en preview pour akka-http 10.1
