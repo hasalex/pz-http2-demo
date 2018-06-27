@@ -186,6 +186,15 @@ NOTE: ne marche pas avec Java 9, à cause d'un bug dans l'image Docker ; par con
 * port 8003 : HTTP/2 h2
 * https://demo.server:8003/push : HTTP/2 avec push
 
+```
+./scripts/run-nginx-proxy.sh
+```
+
+* hostname : demo.proxy
+* port 8001 : HTTP/1.x
+* port 8003 : HTTP/2 h2
+* https://demo.proxy:8003/ : HTTP/2
+
 **Akka HTTP**
 
 _WIP_
